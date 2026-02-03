@@ -1,0 +1,55 @@
+CSR and SSR exist because different problems need different trade-offs
+
+
+WHY CLIENT-SIDE RENDERING (CSR)?
+I want fast interactions without reloading the page.
+Page updates without refresh
+Smooth UI interactions
+Less server load after first load
+Rich frontend experience
+
+Examples
+Dashboards
+Admin panels
+Chat apps
+Gmail-like apps
+
+Server sends files once
+Browser does the heavy work
+UI updates using JS only
+
+
+Problems
+Blank screen until JS loads
+Slower first page load
+Poor SEO (search engines see empty HTML)
+JS failure = broken UI
+
+
+
+
+
+
+
+WHY SERVER-SIDE RENDERING (SSR)?
+I want content visible immediately and searchable
+
+
+Fast first paint
+Works without JS
+SEO friendly
+Better for slow devices
+
+Examples
+
+Blogs
+News websites
+E-commerce product pages
+Landing pages
+
+
+Problems
+More server load
+Full page reloads
+Less smooth interactions
+Harder to scale for huge traffic
