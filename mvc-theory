@@ -1,0 +1,156 @@
+As applications grow, one layer is not enough.
+We divide responsibilities so that change in one layer doesn’t break others.
+
+
+MVC is an architectural pattern that separates an application into Model, View, and Controller.
+
+It answers:
+Who stores data?
+Who shows data?
+Who handles logic?
+
+
+---------------------------------------------------------------------------------------
+Model (M) — Data Layer
+Model represents the structure of data and rules related to data.
+
+In real projects:
+
+DB schema
+ORM models (Mongo, SQL)
+Business data shape
+
+Example - User {
+  id,
+  name,
+  email
+}
+
+Model does NOT know about HTTP, routes, or UI.
+
+---------------------------------------------------------------------------------------
+
+
+View (V)
+Traditional MVC View
+
+HTML pages
+Templates (EJS, Pug)
+
+
+BUT in modern backend APIs 
+
+Backend does NOT render UI
+Frontend (React, Angular) handles views
+
+“In REST APIs, JSON is the View.
+
+---------------------------------------------------------------------------------------
+
+
+Controller (C) 
+
+Controller Responsibility-
+Controller handles HTTP requests and responses.
+
+What it SHOULD do:
+
+Read req
+Validate input
+Call service
+Send res
+
+What it SHOULD NOT do:
+
+DB logic
+Complex business rules
+
+
+---------------------------------------------------------------------------------------
+
+
+
+Why MVC Alone is NOT Enough ?
+
+In small apps, MVC works.
+
+But in real apps:
+
+Controllers become fat
+Business logic mixes with HTTP
+Code becomes hard to test
+That’s why we add more layers
+
+---------------------------------------------------------------------------------------
+
+
+Services — Business Logic Layer
+
+
+Service contains business rules and application logic.
+
+Validation rules
+Calculations
+Decision making
+
+
+Controllers talk to services, not to DB.
+
+---------------------------------------------------------------------------------------
+
+
+
+
+DAL / Repository — Data Access Layer
+
+Even without DB, concept exists.
+
+export const saveUser = (user) => {
+  users.push(user);
+  return user;
+};
+
+Benefits:
+
+DB can change
+Business logic remains same
+If tomorrow you move from array → MongoDB, only DAL changes.
+
+
+---------------------------------------------------------------------------------------
+
+
+
+DTOs — Data Transfer Objects
+we should not save password
+
+DTO Solution
+DTO controls what data goes IN and OUT.
+
+export const userResponseDTO = (user) => ({
+  id: user.id,
+  name: user.name,
+  email: user.email
+});
+
+DTO protects internal data structure.
+---------------------------------------------------------------------------------------
+
+
+
+Utils — Helper Functions
+
+What are Utils?
+Reusable helper functions that are not business logic.
+
+Examples:
+
+Generate ID
+Hash password
+Format date
+
+export const generateId = () => Date.now().toString();
+
+---------------------------------------------------------------------------------------
+
+
