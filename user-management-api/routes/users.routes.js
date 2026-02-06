@@ -3,7 +3,8 @@ import {
   getUsers,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  patchUser
 } from "../controllers/user.controller.js";
 
 
@@ -13,9 +14,9 @@ import { createUserSchema, updateUserSchema } from "../dtos/user.zod.js";
 // import { validateZod } from "../middlewares/auth.js";
 const router = express.Router();
 
-router.get("/", checkAuth, getUsers);
-router.post("/", validateZod(createUserSchema),createUser);
-router.patch("/:id", validateZod(updateUserSchema),updateUser);
+router.get("/", getUsers);
+router.post("/", createUser);
+router.patch("/:id",patchUser);
 router.delete("/:id", deleteUser);
 
 export default router;

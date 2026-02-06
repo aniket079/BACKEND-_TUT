@@ -1,13 +1,17 @@
 
 import { users } from "../data/users.js";
 
-import { createUserService } from "../services/user.service.js";
+import { createUserService ,getUsersService ,updateUserService} from "../services/user.service.js";
 
 
-export const getUsers = (req, res) => {
-  const {token} = req.headers
-  console.log("req",req);
-  console.log("token",token)
+
+export const getUsers = async (req, res) => {
+  // const {token} = req.headers
+  // console.log("req",req);
+  // console.log("token",token)
+
+  const users = await getUsersService();
+  console.log("getting users",users,typeof users);
   res.status(200).json({
     success: true,
     count: users.length,
@@ -125,12 +129,23 @@ export const deleteUser = (req, res) => {
 // };
 
 export const createUser = (req, res) => {
-  const {email,name}=req.body;
+  const {email,name,password,role}=req.body;
   
-  const userBody = createUserService(name,email);
-
+  const userBody = createUserService(name,email,password,role);
+  
   res.status(201).json({
     success: true,
     data: userBody
   });
 };
+
+
+
+export const patchUser = async (req,res)=>{
+  const user = await updateUserService(req.params.id, req.body);
+
+  res.json({
+    success: true,
+    data: user
+  });
+}

@@ -1,0 +1,400 @@
+Introduction to Databases
+
+What is a Database?
+A database is a structured place to store data permanently so it can be:
+
+Retrieved quickly
+Updated safely
+Deleted correctly
+Accessed by multiple users at the same time
+
+Why not variables or arrays?
+
+Variables → lost when program stops
+Arrays → limited, memory-based
+Files → hard to search & manage
+
+
+“Whenever data must survive server restart, we need a database.”
+
+Examples of data needing a database:
+
+Users
+Orders
+Payments
+Messages
+Logs
+
+
+--------------------------------------------------------------------------------------
+
+
+Database Management System (DBMS)
+What is a DBMS?
+
+A DBMS is software that manages databases for us.
+
+It handles:
+
+Data storage
+Data retrieval
+Security
+Concurrency (multiple users)
+Crash recovery
+
+Important concept:
+
+We never talk directly to database files.
+We talk to the DBMS, and DBMS talks to files.
+
+Examples:
+
+MySQL → DBMS
+PostgreSQL → DBMS
+MongoDB → DBMS
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+What is MongoDB?
+
+MongoDB is a NoSQL, document-oriented database.
+
+Data stored as documents
+Documents look like JSON
+Collections instead of tables
+
+
+“MongoDB stores data the same way JavaScript understands it.”
+
+Why MongoDB became popular?
+
+JavaScript everywhere (frontend + backend)
+Flexible schema
+Easy scaling
+Faster development
+
+-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+SQL vs NoSQL (VERY IMPORTANT)
+
+SQL Databases
+
+Fixed schema
+Tables, rows, columns
+JOINs used to combine data
+Strong consistency
+
+
+NoSQL Databases (MongoDB)
+
+Flexible schema
+Collections & documents
+Data can be nested
+Designed for scalability
+
+
+SQL is structure-first. MongoDB is data-first.
+
+When SQL is better?
+
+Banking
+Accounting
+Highly relational data
+
+
+
+When MongoDB is better?
+
+User profiles
+Social media
+E-commerce
+Analytics
+
+
+---------------------------------------------------------------------------------------------------------
+
+
+
+MongoDB vs Relational Databases
+
+Relational approach:
+
+Users table
+Address table
+JOIN required
+
+MongoDb Approach:
+
+{
+  "name": "Aniket",
+  "addresses": [
+    { "city": "Bangalore", "pincode": 560078 },
+    { "city": "Delhi", "pincode": 110001 }
+  ]
+}
+
+
+Golden MongoDB rule:
+
+Data that is used together should be stored together.
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+Database, Collection, Document
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+
+BSON vs JSON (Interview Favorite)
+
+JSON
+Text-based
+Used in APIs
+Limited data types
+
+BSON
+
+Binary format
+Faster to parse
+
+Supports:
+
+Date
+ObjectId
+Binary
+Decimal128
+
+Teaching line:
+“We send JSON, MongoDB stores BSON.”
+
+
+Date + RandomBytes + Counter
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+ACID in MongoDB (Modern Versions)
+
+
+ What is ACID? 
+ACID is a set of rules that make sure:
+
+Data never becomes corrupt, even when:
+Server crashes
+Multiple users update data
+Errors occur midway
+
+ACID stands for:
+
+Atomicity
+Consistency
+Isolation
+Durability
+
+
+“ACID is the difference between a toy database and a production database.”
+
+Atomicity in MongoDB
+
+Meaning of Atomicity
+Either all operations succeed, or none do.
+MongoDB’s default atomicity
+
+MongoDB guarantees atomicity at the document level.
+
+Important statement:
+
+“One document update is always atomic in MongoDB.”
+
+Example (Single Document)
+{
+  "user": "A",
+  "balance": 1000,
+  "transactions": []
+}
+
+
+If MongoDB updates:
+
+balance = 800
+push 200 to transactions
+
+Either both happen or neither happens.
+
+Multi-Document Case
+
+If updating:
+
+User collection
+Orders collection
+
+Not atomic unless using transactions
+
+Consistency in MongoDB
+Meaning of Consistency
+
+Database moves from one valid state to another valid state.
+
+MongoDB ensures:
+
+
+Index constraints
+Unique indexes
+Document validation rules
+
+
+“MongoDB enforces consistency through validation and indexes, not fixed schemas.”
+
+Example
+
+Email must be unique
+Age must be a number
+
+MongoDB will reject invalid writes.
+---------------------------------------
+
+Isolation in MongoDB
+Meaning of Isolation
+
+One transaction should not see partial data from another transaction.
+MongoDB Isolation Levels
+Snapshot isolation
+Readers see committed data only
+
+
+
+“MongoDB hides half-done operations from other users.”
+
+Without Transactions
+
+Single document updates are isolated
+Multi-document updates may be visible partially
+
+---------------------------------------------
+Meaning of Durability
+
+Once data is written successfully, it will not be lost, even after crash.
+
+MongoDB ensures durability using:
+Write Ahead Logs
+Journaling
+Replication
+
+
+“Once MongoDB says ‘saved’, your data is safe on disk.”
+
+| MongoDB Version | ACID Support                |
+| --------------- | --------------------------- |
+| Before 4.0      | Single-document only        |
+| 4.0+            | Multi-document transactions |
+| Modern MongoDB  | Full ACID support           |
+
+
+Interview-ready line:
+
+“MongoDB supports full ACID transactions since version 4.0.”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+  "name": "Aniket",
+  "age": 24,
+  "city": "Bangalore",
+  "email": "aniket@gmail.com",
+  "isActive": true
+}
+
+
+[
+  {
+    "name": "Aniket",
+    "age": 24,
+    "city": "Bangalore",
+    "email": "aniket@gmail.com",
+    "isActive": true
+  },
+  {
+    "name": "Rahul",
+    "age": 28,
+    "city": "Delhi",
+    "email": "rahul@gmail.com",
+    "isActive": false
+  },
+  {
+    "name": "Sneha",
+    "age": 22,
+    "city": "Mumbai",
+    "email": "sneha@gmail.com",
+    "isActive": true
+  }
+]
+
+
+
+{ "city": "Bangalore" }
+{ "age": { "$gt": 25 } }
+{ "city": { "$in": ["Delhi", "Mumbai"] } }
+
+
+
+
+
+projection
+
+PROJECT (Which fields?)
+Where to type
+
+Project input box
+
+Example
+{ "name": 1, "email": 1, "_id": 0 }
+
+What happens
+
+Atlas keeps only selected fields
+
+Other fields disappear from result
+
+This does NOT affect database data
+This affects only what is shown / returned
+
+Common mistake
+{ "name": 1, "email": 0 }   // ❌ invalid
+
+Correct
+{ "name": 1, "email": 1 }
+
+
+Rule:
+Either include (1) OR exclude (0) — not both
+_id is the only exception
+
+
+
+
