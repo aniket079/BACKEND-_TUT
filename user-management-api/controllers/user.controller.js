@@ -1,7 +1,7 @@
 
 import { users } from "../data/users.js";
 
-import { createUserService ,getUsersService ,updateUserService} from "../services/user.service.js";
+import { createUserService ,getUsersService ,updateUserService,getUsersServiceisActive,findByEmailAndUpdate} from "../services/user.service.js";
 
 
 
@@ -18,6 +18,16 @@ export const getUsers = async (req, res) => {
     data: users
   });
 };
+
+export const isActive = async(req,res)=>{
+  console.log("isActive in controller");
+  const users = await getUsersServiceisActive();
+   res.status(200).json({
+    success: true,
+    count: users.length,
+    data: users
+  });
+}
 
 // export const createUser = (req, res) => {
 //   try {
@@ -128,10 +138,10 @@ export const deleteUser = (req, res) => {
 //   res.status(204).send();
 // };
 
-export const createUser = (req, res) => {
+export const createUser = async(req, res) => {
   const {email,name,password,role}=req.body;
   
-  const userBody = createUserService(name,email,password,role);
+  const userBody = await createUserService(name,email,password,role);
   
   res.status(201).json({
     success: true,
@@ -148,4 +158,15 @@ export const patchUser = async (req,res)=>{
     success: true,
     data: user
   });
+}
+export const updatebyEmail = async (req,res)=>{
+  const {email ,updateUser} = req.body;
+  
+  const user = await findByEmailAndUpdate(email,updateUser);
+
+  res.json({
+    success: true,
+    data: user
+  });
+
 }

@@ -13,7 +13,12 @@ export const deleteUserService = (id) => {
 };
 
 export const getUsersService = async ()=>{
-    const users = await User.find();
+    const users = await User.find().sort({email:1});
+    return users
+}
+export const getUsersServiceisActive = async ()=>{
+  console.log("isActive in service")
+    const users = await User.find({isActive:true}).limit(5).skip(1);
     return users
 }
 
@@ -45,6 +50,19 @@ export const createUserService=async(name,email,password,role)=>{
 export const updateUserService =async(id,data)=>{
    const updateData  = await User.findByIdAndUpdate(
     id,
+    {$set:data},
+    {
+      new:true,
+      runValidators: true
+    }
+
+   )
+   return updateData;
+}
+
+export const findByEmailAndUpdate =async(email,data)=>{
+   const updateData  = await User.findOneAndUpdate(
+    {email:email},
     {$set:data},
     {
       new:true,
